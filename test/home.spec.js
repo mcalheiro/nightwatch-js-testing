@@ -59,4 +59,18 @@ describe('Home page', function() {
         browser.element.findByText('{Client Side Execution}').click()  
         browser.assert.titleMatches('Getting Started')      
     })
+
+    it('Should allow for substack subscription', function(browser) {
+        const iframeSelector = '.footer__wrapper-inner-social-subscribe iframe'
+        browser.executeScript(function(iframeSelector) {
+            document.querySelector(iframeSelector).scrollIntoView()
+        }, [iframeSelector])
+        browser.element.find(iframeSelector).setAttribute('id', 'iframe-test-nightwatch')
+        browser.frame('iframe-test-nightwatch')
+        browser.element.find('input[type=email]').sendKeys('test@nightwatch.org')
+        browser.element.find('button[type=submit]').click()
+        browser.ensure.alertIsPresent()
+        browser.alerts.accept()
+        browser.element.findByText('Sign out').assert.present()
+    })
 })
