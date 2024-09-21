@@ -62,9 +62,11 @@ describe('Home page', function() {
 
     it('Should allow for substack subscription', function(browser) {
         const iframeSelector = '.footer__wrapper-inner-social-subscribe iframe'
-        browser.executeScript(function(iframeSelector) {
-            document.querySelector(iframeSelector).scrollIntoView()
-        }, [iframeSelector])
+        browser.perform(function() {
+            return this.actions().move({
+                origin: browser.element.find(iframeSelector)
+            })
+        })
         browser.element.find(iframeSelector).setAttribute('id', 'iframe-test-nightwatch')
         browser.frame('iframe-test-nightwatch')
         browser.element.find('input[type=email]').sendKeys('test@nightwatch.org')
