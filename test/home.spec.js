@@ -86,4 +86,30 @@ describe('Home page', function() {
         browser.window.switchTo(allWindows[1])
         browser.assert.urlContains('github.com/nightwatchjs')
     })
+
+    it('Should verify the location in Korea, Netherlands and Portugal', function (browser) {
+        const locations = [
+            {
+                location: { latitude: 41.157965, longitude: -8.629101, accuracy: 100 },
+                country: 'Portugal'
+            },
+            {
+                location: { latitude: 52.357080, longitude: 4.881613, accuracy: 100 },
+                country: 'Netherlands'
+            },
+            {
+                location: { latitude: 37.551986, longitude: 126.988936, accuracy: 100 },
+                country: 'Korea'
+            }
+        ]
+
+        locations.forEach(loc => {
+            browser.setGeolocation(loc.location).navigateTo('https://www.where-am-i.co/')
+            browser.waitUntil(async function () {
+                const geo_dom_class = await browser.element.find('#geolocation_address').getAttribute('class').value
+                return !geo_dom_class.includes('text-muted')
+            })
+            browser.element.find('#geolocation_address').getText().assert.contains(loc.country)
+        })
+    })
 })
