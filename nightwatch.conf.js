@@ -63,6 +63,9 @@ module.exports = {
       desiredCapabilities: {
         browserName: 'chrome',
         'goog:chromeOptions': {
+          prefs: {
+            'profile.managed_default_content_settings.geolocation': 1
+          },
           // More info on Chromedriver: https://sites.google.com/a/chromium.org/chromedriver/
           args: [
             //'--no-sandbox',
