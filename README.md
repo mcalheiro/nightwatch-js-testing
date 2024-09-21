@@ -1,13 +1,16 @@
+# Nightwatch.js
+
 To start a project
 ```
 npm init nightwatch PROJECT_NAME
 ```
-Leave empty if already in a folder
+Leave PROJECT_NAME empty if already in a folder
 
+## Running tests
 ```
 npx nightwatch test
 ```
-Test is the directoryu chosen in the setup. Output should look like:
+You may also use the vscode plugin. Test is the director you chose in the setup. Output should look like:
 ```
 Running   default: home.spec.js  
 
