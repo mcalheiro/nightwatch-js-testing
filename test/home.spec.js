@@ -1,5 +1,10 @@
 describe('Home page', function() {
 
+    before(function(browser) {
+        const isMac = process.platform === 'darwin';
+        browser.commandKey = isMac ? browser.Keys.COMMAND : browser.Keys.CONTROL;
+    })
+
     beforeEach(function(browser) {
         browser.navigateTo('/').window.maximize()
     })
@@ -31,5 +36,13 @@ describe('Home page', function() {
         browser.element.find('.DocSearch-Dropdown-Container').assert.present()
         searchInput.sendKeys([browser.Keys.ARROW_DOWN, browser.Keys.ENTER])
         browser.element.find('h1').getText().assert.contains('.frameParent')
+    })
+
+    it('Should copy the installation command when click the copy button', function(browser) {
+        browser.element.findByText('Copy').click()
+        browser.element.find('#docsearch').click()
+        const inputElement = browser.element.find('.DocSearch-Modal .DocSearch-Form input')
+        inputElement.sendKeys([browser.commandKey, 'v'])
+        inputElement.getAttribute('value').assert.contains('npm init nightwatch')
     })
 })
