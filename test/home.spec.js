@@ -1,23 +1,23 @@
 describe('Home page', function() {
 
-    before(function(browser) {
+    before(function (browser) {
         const isMac = process.platform === 'darwin';
         browser.commandKey = isMac ? browser.Keys.COMMAND : browser.Keys.CONTROL;
     })
 
-    beforeEach(function(browser) {
+    beforeEach(function (browser) {
         browser.navigateTo('/').window.maximize()
     })
 
-    afterEach(function(browser) {
+    afterEach(function (browser) {
         browser.end()
     })
 
-    it('Should have the correct title', function(browser) {
+    it('Should have the correct title', function (browser) {
         browser.assert.textEquals('h1', 'Introducing Nightwatch v3')
     })
 
-    it('Should lead the the installation page when click on Get Started', function(browser) {
+    it('Should lead the the installation page when click on Get Started', function (browser) {
         browser.element.findByText('Get Started').click()
         browser.element.findByPlaceholderText('Filter by title').waitUntil('visible')
         browser.element.find('h1').getText().assert.equals('Install Nightwatch')
@@ -26,7 +26,7 @@ describe('Home page', function() {
         browser.element.findByPlaceholderText('Filter by title').getAttribute('autocomplete').assert.equals('off')
     })
 
-    it('Should allow search and show correct results', function(browser) {
+    it('Should allow search and show correct results', function (browser) {
         browser.element.find('#docsearch').click()
         browser.element.find('.DocSearch-Modal').waitUntil('visible')
 
@@ -38,7 +38,7 @@ describe('Home page', function() {
         browser.element.find('h1').getText().assert.contains('.frameParent')
     })
 
-    it('Should copy the installation command when click the copy button', function(browser) {
+    it('Should copy the installation command when click the copy button', function (browser) {
         browser.element.findByText('Copy').click()
         browser.element.find('#docsearch').click()
         const inputElement = browser.element.find('.DocSearch-Modal .DocSearch-Form input')
@@ -60,7 +60,7 @@ describe('Home page', function() {
         browser.assert.titleMatches('Getting Started')      
     })
 
-    it('Should allow for substack subscription', function(browser) {
+    it('Should allow for substack subscription', function (browser) {
         const iframeSelector = '.footer__wrapper-inner-social-subscribe iframe'
         browser.perform(function() {
             return this.actions().move({
@@ -74,5 +74,16 @@ describe('Home page', function() {
         browser.ensure.alertIsPresent()
         browser.alerts.accept()
         browser.element.findByText('Sign out').assert.present()
+    })
+
+    it('Should open github repo when click on github icon', async function (browser) {
+        browser.element.find('ul.navigation-list.social li:nth-child(2) a').click()
+        browser.waitUntil(async function () {
+            const windowHandles = await browser.window.getAllHandles()
+            return windowHandles.length === 2
+        })
+        const allWindows = await browser.window.getAllHandles()
+        browser.window.switchTo(allWindows[1])
+        browser.assert.urlContains('github.com/nightwatchjs')
     })
 })
