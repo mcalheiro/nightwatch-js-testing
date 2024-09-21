@@ -45,4 +45,18 @@ describe('Home page', function() {
         inputElement.sendKeys([browser.commandKey, 'v'])
         inputElement.getAttribute('value').assert.contains('npm init nightwatch')
     })
+
+    it('Should change with client script', async function (browser) {
+        const changeText = '{Client Side Execution}'
+        browser.executeScript(function (new_text) {
+            const getStartedButton = document.querySelector('.hero__action-button--get-started')
+            getStartedButton.innerHTML = new_text
+            getStartedButton.style.background = '#ff7f2b'
+            document.querySelector('header .navigation-list').style.display = 'none'
+            document.querySelector('header .navigation__logo').style.width = '900px'
+        }, [changeText])
+        browser.pause(4000)
+        browser.element.findByText('{Client Side Execution}').click()  
+        browser.assert.titleMatches('Getting Started')      
+    })
 })
